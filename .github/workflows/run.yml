@@ -21,17 +21,17 @@ jobs:
           wget https://dl.min.io/client/mc/release/linux-amd64/mc
           chmod +x mc
           mc alias set s4/ http://s4.cloud.rileysnyder.org "$MINIO_USER" "$MINIO_PASSWORD"
-        env:
-          MINIO_USER: {{ secrets.MINIO_USER }}
-          MINIO_PASSWORD: {{ secrets.MINIO_PASSWORD }}
+        with:
+          MINIO_USER: ${{ secrets.MINIO_USER }}
+          MINIO_PASSWORD: ${{ secrets.MINIO_PASSWORD }}
 
       - name: pull database
         run: mc cp s4/github/jongraz.json ./
 
       - name: run
         run: python main.py
-        env:
-          BOT_ID: {{ secrets.BOT_ID }}
+        with:
+          BOT_ID: ${{ secrets.BOT_ID }}
 
       - name: save database
         run: mc cp ./jongraz.json s4/github/
