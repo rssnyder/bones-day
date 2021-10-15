@@ -26,7 +26,7 @@ jobs:
           MINIO_PASSWORD: ${{ secrets.MINIO_PASSWORD }}
 
       - name: pull database
-        run: mc cp s4/github/jongraz.json ./
+        run: ./mc cp s4/github/jongraz.json ./
 
       - name: run
         run: python main.py
