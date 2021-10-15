@@ -21,7 +21,7 @@ jobs:
           wget https://dl.min.io/client/mc/release/linux-amd64/mc
           chmod +x mc
           mc alias set s4/ http://s4.cloud.rileysnyder.org "$MINIO_USER" "$MINIO_PASSWORD"
-        with:
+        env:
           MINIO_USER: ${{ secrets.MINIO_USER }}
           MINIO_PASSWORD: ${{ secrets.MINIO_PASSWORD }}
 
@@ -30,7 +30,7 @@ jobs:
 
       - name: run
         run: python main.py
-        with:
+        env:
           BOT_ID: ${{ secrets.BOT_ID }}
 
       - name: save database
