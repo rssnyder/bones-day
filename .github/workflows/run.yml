@@ -1,0 +1,37 @@
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 * * * *"
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/playwright:focal
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: install deps
+        run: | 
+          apt-get update && apt-get install -y python3-pip
+          pip3 install -r requiremnts.txt
+          python -m playwright install
+
+      - name: set up minio
+        run: |
+          wget https://dl.min.io/client/mc/release/linux-amd64/mc
+          chmod +x mc
+          mc alias set s4/ http://s4.cloud.rileysnyder.org "$MINIO_USER" "$MINIO_PASSWORD"
+        env:
+          MINIO_USER: {{ secrets.MINIO_USER }}
+          MINIO_PASSWORD: {{ secrets.MINIO_PASSWORD }}
+
+      - name: pull database
+        run: mc cp s4/github/jongraz.json ./
+
+      - name: run
+        run: python main.py
+        env:
+          BOT_ID: {{ secrets.BOT_ID }}
+
+      - name: save database
+        run: mc cp ./jongraz.json s4/github/
