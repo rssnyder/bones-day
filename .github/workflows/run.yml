@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     container: mcr.microsoft.com/playwright:focal
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
       - name: install deps
         run: | 
@@ -16,22 +16,15 @@ jobs:
           pip3 install -r requirements.txt
           python -m playwright install
 
-      - name: set up minio
-        run: |
-          curl -L https://dl.min.io/client/mc/release/linux-amd64/mc -o mc
-          chmod +x mc
-          ./mc alias set s4 https://s4.cloud.rileysnyder.org "$MINIO_USER" "$MINIO_PASSWORD"
-        env:
-          MINIO_USER: ${{ secrets.MINIO_USER }}
-          MINIO_PASSWORD: ${{ secrets.MINIO_PASSWORD }}
-
-      - name: pull database
-        run: ./mc cp s4/github/jongraz.json ./
-
       - name: run
         run: python main.py
         env:
           BOT_ID: ${{ secrets.BOT_ID }}
 
-      - name: save database
-        run: ./mc cp ./jongraz.json s4/github/
+      - name: save
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add jongraz.json
+          git commit -m db_update
+          git push
