@@ -18,6 +18,10 @@ if __name__ == "__main__":
         if db.search(videos.id == video_id):
             print("already sent video")
             continue
+        elif "#duet" in video.get("desc", ""):
+            print("not a bones day post")
+            db.insert({"id": video_id})
+            continue
 
         video_url = f"https://www.tiktok.com/@jongraz/video/{video_id}"
         try:
