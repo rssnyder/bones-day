@@ -4,4 +4,7 @@
 
 is it a bones day?
 
-an inside joke with some friends, who still use groupme for some reason...
+~~an inside joke with some friends, who still use groupme for some reason...~~
+
+my dad brought up bones day at the thanksgiving dinner table, the bot must die.
+
